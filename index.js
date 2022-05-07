@@ -18,6 +18,7 @@ async function run() {
     try {
         await client.connect();
         const productCollection = client.db('perfumeElegance').collection('product');
+        const itemCollection = client.db('perfumeElegance').collection('item');
 
         app.get('/inventory', async (req, res) => {
             const query = {};
@@ -47,6 +48,16 @@ async function run() {
             const result = await productCollection.deleteOne(query);
             res.send(result);
         });
+
+
+        //item collect api
+
+        //item post
+        app.post('/item', async (req, res) => {
+            const item = req.body;
+            const result = await itemCollection.insertOne(item);
+            res.send(result);
+        })
 
     }
     finally {
