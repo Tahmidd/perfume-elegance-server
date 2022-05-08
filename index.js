@@ -49,6 +49,22 @@ async function run() {
             res.send(result);
         });
 
+        // update user
+        app.put('/inventory/:id', async (req, res) => {
+            const id = req.params.id;
+            const updatedUser = req.body;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    quantity: updatedUser.quantity,
+                }
+            };
+            const result = await productCollection.updateOne(filter, updatedDoc, options);
+            res.send(result);
+
+        })
+
 
         //item collect api
         //get
@@ -60,12 +76,21 @@ async function run() {
             res.send(items);
         })
 
+        // app.get('/item', async (req, res) => {
+        //     const query = {};
+        //     const cursor = itemCollection.find(query);
+        //     const items = await cursor.toArray();
+        //     res.send(items);
+        // });
+
         //item post
         app.post('/item', async (req, res) => {
             const item = req.body;
             const result = await itemCollection.insertOne(item);
             res.send(result);
         })
+
+
 
     }
     finally {
